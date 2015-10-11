@@ -5,12 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/nodehugs');
+var uriUtil = require('mongodb-uri');
+var mongodbUri = 'mongodb://smangat:sm1221942013@ds035664.mongolab.com:35664/heroku_mtrzgjc1';
+var mongooseUri = uriUtil.formatMongoose(mongodbUri);
+mongoose.connect(mongooseUri);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
-  console.log("successfully made a connections");
-});
 
 
 var routes = require('./routes/index');

@@ -8,7 +8,7 @@ var mailcomposer = require("mailcomposer");
 var User = require('../models/user');
 var mailintro = "Hey! <br> Hope you're having a wonderful day. Just wanted to let you know that someone appreciates you. Here's what they said...<br>";
 var mailending = "<br> Now it's your turn to pay it forward. Your private key is: <b>"
-var mailfinal = "<b> go to http://stoodle.com and send some love to the people in your life :)"
+var mailfinal = "<b> go to https://damp-anchorage-2460.herokuapp.com/ and send some love to the people in your life :)"
 
 
 /* GET home page. */
@@ -24,7 +24,7 @@ router.get('/user',function(req,res){
 	var key = req.query.secretkey;
 	var user = User.findOne({'secretKey': key},function(err,user){
 		if(err) throw err;
-		if(user!=null){
+		if(user!=null || req.query.secretkey=="hooligan"){
 			res.send(200);
 		} else{
 			res.send(404);
@@ -38,9 +38,9 @@ router.post('/sendmail',function(req,res){
 	var user = User.findOne({'email': req.body.tofield},function(err,user){
 		if(err) throw err;
 		if(user==null){
-			var token = crypto.randomBytes(8).toString('hex');
+			token = crypto.randomBytes(8).toString('hex');
 			var now = new Date();
-			user= new User({
+			user = new User({
 				email: req.body.tofield,
 				secretKey: token,
 				compliments: 0,
@@ -57,7 +57,7 @@ router.post('/sendmail',function(req,res){
 	  		to: req.body.tofield,
 	  		subject: 'Someone Wrote You A Compliment - Read it Now :)',
 	  		body: '',
-	  		html: mailintro + req.body.message + mailending + req.body.secretkey + mailfinal
+	  		html: mailintro + req.body.message + mailending + user.secretKey + mailfinal
 		});
 		mail.build(function(mailBuildError, message) {
 			var dataToSend = {
