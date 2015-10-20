@@ -6,6 +6,7 @@ var userSchema = new Schema({
 	email: { type: String, required: true, unique: true },
 	secretKey: { type: String, required: true, unique: true},
 	compliments: Number,
+	referrer: String,
 	created_at: Date,
 	updated_at: Date
 });

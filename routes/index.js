@@ -6,9 +6,10 @@ var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 var crypto = require('crypto');
 var mailcomposer = require("mailcomposer");
 var User = require('../models/user');
-var mailintro = "Hey! <br> Hope you're having a wonderful day. Just wanted to let you know that someone appreciates you. Here's what they said...<br>";
-var mailending = "<br> Now it's your turn to pay it forward. Your private key is: <b>"
-var mailfinal = "<b> go to https://damp-anchorage-2460.herokuapp.com/ and send some love to the people in your life :)"
+var Kudo = require('../models/kudo');
+var mailintro = "Hey! <br><br> Hope you're having a wonderful day. Just wanted to let you know that someone appreciates you. Here's what they said...<br><br>\"";
+var mailending = "\"<br><br> Now it's your turn to pay it forward! :) Your private key is: <b>"
+var mailfinal = "</b> go to https://damp-anchorage-2460.herokuapp.com/ and send some love to your friends and family. So far 300 people have been complimented, let's keep it going ay?"
 
 
 /* GET home page. */
@@ -44,6 +45,7 @@ router.post('/sendmail',function(req,res){
 				email: req.body.tofield,
 				secretKey: token,
 				compliments: 0,
+				referrer: req.body.secretkey,
 				created_at: now
 			});
 		    user.save(function(err) {
@@ -52,10 +54,29 @@ router.post('/sendmail',function(req,res){
 			});
 		}
 
+		kudo = new Kudo({
+			from: req.body.secretkey,
+			to: user.secretKey,
+			body: req.body.message,
+			created_at: new Date()
+		});
+
+		kudo.save(function(err) {
+			if (err) throw err;
+		  	console.log('Kudo saved successfully!');
+		});
+
+		User.findOne({'secretKey': req.body.secretkey},function(err,user){
+			user.compliments+=1;
+			user.save(function(error){
+				if(error) throw error;
+			});
+		});
+
 		var mail = mailcomposer({
 	  		from: 'postmaster@sandbox419b7360fa174f0aadc48d29471c91c2.mailgun.org',
 	  		to: req.body.tofield,
-	  		subject: 'Someone Wrote You A Compliment - Read it Now :)',
+	  		subject: 'Someone Wrote You A Compliment! :)',
 	  		body: '',
 	  		html: mailintro + req.body.message + mailending + user.secretKey + mailfinal
 		});
@@ -72,6 +93,7 @@ router.post('/sendmail',function(req,res){
 				} 
 			});
 		});
+		//add in an error message
 		res.redirect('/');
 	});
 });
