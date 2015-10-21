@@ -1,23 +1,36 @@
 var express = require('express');
 var router = express.Router();
 var api_key = 'key-73e15458e534ee382ea7d282839a1093';
-var domain = 'sandbox419b7360fa174f0aadc48d29471c91c2.mailgun.org';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});	
+var domain = 'kudositforward.com';
+var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 var crypto = require('crypto');
 var mailcomposer = require("mailcomposer");
 var User = require('../models/user');
 var Kudo = require('../models/kudo');
-var mailintro = "Hey! <br><br> Hope you're having a wonderful day. Just wanted to let you know that someone appreciates you. Here's what they said...<br><br>\"";
-var mailending = "\"<br><br> Now it's your turn to pay it forward! :) Your private key is: <b>"
-var mailfinal = "</b> go to https://damp-anchorage-2460.herokuapp.com/ and send some love to your friends and family. So far 300 people have been complimented, let's keep it going ay?"
-
+var mailintro = "Hey! <br><br> Hope you're having a wonderful day. :) Someone anonymously wrote you a compliment and here's what they said...<br><h3>\"";
+var mailending = "\"</h3><br> Now you can send anonymous compliments at www.kudositforward.com too! Your SecretKey is: <b>";
+var mailgoal = "</b>. <br><br>Our goal is <b>1 million </b> compliments by December 31st, 2015. Just consider how much joy we could add into the world by starting a chain reaction of gratitude. So far <b>"
+var mailfinal = "</b>/1000000 compliments have been sent! Every compliment you send adds 1 to that total. Try to send at least 3 compliments today and pay it forward. Cheers to a happier world. :)  <3";
+var totalcompliments = 0;
 
 /* GET home page. */
 router.get('/', function(req, res) {
+  var message = "Send an anonymous compliment and track your impact <3";
+  var status = "";
+
+  if(req.param("success")==1){
+  	message = "Compliment Sent Succesfully! Feel free to send another :)";
+  	status = "text-success";
+  } else if(req.param("success")==0){
+  	message = "Please make sure you fill all fields!";
+  	status = "text-danger";
+  }
+
   res.render('index', {
             title: "SendKudos", //page title
             action: "/sendmail", //post action for the form
-            message: "Send an anonymous compliment and track your impact <3"
+            message: message,
+            status: status
         });
 });
 
@@ -35,8 +48,11 @@ router.get('/user',function(req,res){
 
 router.post('/sendmail',function(req,res){
 	//validate to make sure the fields are non-empty
-
-	var user = User.findOne({'email': req.body.tofield},function(err,user){
+	if(req.body.tofield == '' || req.body.message == ''){
+		res.redirect('/?success=0');
+	}
+	else{
+		var user = User.findOne({'email': req.body.tofield},function(err,user){
 		if(err) throw err;
 		if(user==null){
 			token = crypto.randomBytes(8).toString('hex');
@@ -48,9 +64,9 @@ router.post('/sendmail',function(req,res){
 				referrer: req.body.secretkey,
 				created_at: now
 			});
+			console.log(user);
 		    user.save(function(err) {
 		  		if (err) throw err;
-		  		console.log('User saved successfully!');
 			});
 		}
 
@@ -67,18 +83,20 @@ router.post('/sendmail',function(req,res){
 		});
 
 		User.findOne({'secretKey': req.body.secretkey},function(err,user){
-			user.compliments+=1;
-			user.save(function(error){
-				if(error) throw error;
-			});
+			if(user!=null){
+				user.compliments+=1;
+				user.save(function(error){
+					if(error) throw error;
+				});
+			}
 		});
-
+		totalcompliments+=1;
 		var mail = mailcomposer({
-	  		from: 'postmaster@sandbox419b7360fa174f0aadc48d29471c91c2.mailgun.org',
+	  		from: 'compliments@kudositforward.com',
 	  		to: req.body.tofield,
 	  		subject: 'Someone Wrote You A Compliment! :)',
 	  		body: '',
-	  		html: mailintro + req.body.message + mailending + user.secretKey + mailfinal
+	  		html: mailintro + req.body.message + mailending + user.secretKey + mailgoal + totalcompliments + mailfinal
 		});
 		mail.build(function(mailBuildError, message) {
 			var dataToSend = {
@@ -93,9 +111,9 @@ router.post('/sendmail',function(req,res){
 				} 
 			});
 		});
-		//add in an error message
-		res.redirect('/');
-	});
+		res.redirect('/?success=1');
+	    });
+	}
 });
 
 module.exports = router;
