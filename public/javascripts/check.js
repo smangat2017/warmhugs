@@ -1,5 +1,5 @@
  (function(window, document, undefined) {
- $('#key').on('input',function(e){
+  $('#key').on('input',function(e){
         var user_input = $('#key').val();
         var params = {secretkey: $(this).val()};
           console.log(params);
@@ -14,7 +14,8 @@
                 } else{
                   $('#kudosubmit').prop('disabled',false);
                   $('#responsive').addClass('has-success');
-                   $('#responsive').removeClass('has-error');
+                  $('#responsive').removeClass('has-error');
+                  localStorage.secretkey = user_input;
                 }
               }
           });

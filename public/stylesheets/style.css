@@ -36,11 +36,11 @@ button{
 }
 
 #banner{
-	/*#FF9900*/
     background-image: url("/images/nature-banner.jpg");
-    position:absolute;
+    background-repeat: no-repeat;
+    position: fixed;
     left: 0;
     right: 0;
     height:100%;
-    background-size:100%;
+    background-size: cover;
 }

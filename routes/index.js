@@ -9,9 +9,10 @@ var User = require('../models/user');
 var Kudo = require('../models/kudo');
 var mailintro = "Hey! <br><br> Hope you're having a wonderful day. :) Someone anonymously wrote you a compliment and here's what they said...<br><h3>\"";
 var mailending = "\"</h3><br> Now you can send anonymous compliments at www.kudositforward.com too! Your SecretKey is: <b>";
-var mailgoal = "</b>. <br><br>Our goal is <b>1 million </b> compliments by December 31st, 2015. Just consider how much joy we could add into the world by starting a chain reaction of gratitude. So far <b>"
+var mailgoal = "</b>. <br><br>Our goal is <b>1 million </b> compliments by December 31st, 2015. Just consider how much joy we could add into the world by starting a chain reaction of gratitude. So far <b>";
 var mailfinal = "</b>/1000000 compliments have been sent! Every compliment you send adds 1 to that total. Try to send at least 3 compliments today and pay it forward. Cheers to a happier world. :)  <3";
-var totalcompliments = 0;
+var inspiration = " Take a moment now and appreciate the fact that you probably made someone's day. Thank YOU for adding a little more joy into the world :) "
+var totalcompliments = 84;
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -33,6 +34,7 @@ router.get('/', function(req, res) {
             status: status
         });
 });
+
 
 router.get('/user',function(req,res){
 	var key = req.query.secretkey;
@@ -76,21 +78,33 @@ router.post('/sendmail',function(req,res){
 			body: req.body.message,
 			created_at: new Date()
 		});
-
-		kudo.save(function(err) {
-			if (err) throw err;
-		  	console.log('Kudo saved successfully!');
-		});
-
+		totalcompliments+=1;
 		User.findOne({'secretKey': req.body.secretkey},function(err,user){
 			if(user!=null){
 				user.compliments+=1;
 				user.save(function(error){
 					if(error) throw error;
 				});
+				var mail = mailcomposer({
+	  				from: 'compliments@kudositforward.com',
+	  				to: user.email,
+	  				subject: 'Your Compliment Has Been Delivered!',
+	  				body: '',
+	  				html: "Your compliment to <b>" + req.body.tofield + "</b> has been sent! That's compliment #" + totalcompliments + "/1000000." + inspiration + "<3 Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + user.secretKey +"<b>"
+				});
+				mail.build(function(mailBuildError, message) {
+					var dataToSend = {
+						to: user.email,
+						message: message.toString('ascii')
+					};
+					mailgun.messages().sendMime(dataToSend, function (sendError, body) {
+						if (sendError) {
+							return;
+						} 
+					});
+				});
 			}
 		});
-		totalcompliments+=1;
 		var mail = mailcomposer({
 	  		from: 'compliments@kudositforward.com',
 	  		to: req.body.tofield,
@@ -103,12 +117,15 @@ router.post('/sendmail',function(req,res){
 				to: req.body.tofield,
 				message: message.toString('ascii')
 			};
-
 			mailgun.messages().sendMime(dataToSend, function (sendError, body) {
 				if (sendError) {
-					console.log(sendError);
 					return;
-				} 
+				} else{
+					kudo.messageid = body.id;
+					kudo.save(function(err) {
+						if (err) throw err;
+					});
+				}
 			});
 		});
 		res.redirect('/?success=1');
