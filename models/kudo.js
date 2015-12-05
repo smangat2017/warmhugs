@@ -6,6 +6,7 @@ var kudoSchema = new Schema({
 	from: { type: String, required: true },
 	body: { type: String, required: true },
 	to: String,
+	replied: Boolean,
 	messageid: String,
 	created_at: Date,
 });

@@ -7,6 +7,7 @@ var userSchema = new Schema({
 	secretKey: { type: String, required: true, unique: true},
 	compliments: Number,
 	referrer: String,
+	reach: Number,
 	created_at: Date,
 	updated_at: Date
 });

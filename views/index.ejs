@@ -7,22 +7,21 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   </head>
   <body>
     <div id="banner">
       <div class="jumbotron">
-       <div class="container">
   	       <h1>Make Someone's Day :) </h1>
            <p class=<%=status%>><%=message%></p>
-           <div id="responsive" class="input-group has-feedback" >
-             <form action="/sendmail" method="post">
-              <input id="key" type="password" class="form-control" placeholder="SecretKey" name="secretkey" property="required">
-              <input type="email" class="form-control" placeholder="Recipient's Email" name="tofield" property="required">
-              <textarea id="emailmessage"class="form-control" placeholder="Why do you appreciate this person?" name="message"></textarea>
-              <button id="kudosubmit" class="btn btn-info" disabled ="true" type="submit">Send Kudo!</button>
+             <form class="form-horizontal" action="/sendmail" method="post">
+              <div id="responsive" class="input-group has-feedback" >
+                <input id="key" type="password" class="form-control" placeholder="SecretKey - Check your Compliment Email!" name="secretkey" property="required">
+                <input type="email" class="form-control" placeholder="Recipient's Email" name="tofield" property="required">
+                <textarea id="emailmessage" class="form-control" placeholder="Why do you appreciate this person?" name="message"></textarea>
+                <button id="kudosubmit" class="btn btn-info" disabled ="true" type="submit">Send Kudo!</button>
+              </div>
             </form>
-          </div>
-      </div>
      </div>
     </div>
     <script src="/javascripts/check.js"></script>
