@@ -10,17 +10,7 @@ var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 var mailcomposer = require("mailcomposer");
 var Mixpanel = require('mixpanel');
 var mixpanel = Mixpanel.init('e5ec94f6d2929eb347f89ea8ee8b3610');
-var totalcompliments = 7289;
-var CronJob = require('cron').CronJob;
-var job = new CronJob({
-  cronTime: '00 00 10 * * *',
-  onTick: function() {
-    SendMail.dailyReminder();
-  },
-  start: false,
-  timeZone: 'America/Los_Angeles'
-});
-job.start();
+var totalcompliments = 8014;
 
 /* GET home page. */
 router.get('/', function(req, res) {

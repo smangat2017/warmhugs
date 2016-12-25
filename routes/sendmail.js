@@ -9,7 +9,7 @@ var mailintro = "Hey! <br><br> Hope you're having a wonderful day. :) Someone an
 var mail1 = "\"</h3><br>1.<b> Reply </b> to this email to send a message back to compliment sender! :)";
 var mail2 = "<br>2.<b> Send </b> compliments to at least <b>3</b> other people within <b>24</b> hours at www.kudositforward.com. Feel amazing and track your impact. Your secretKey is: <h3>";
 var mail25 ="</b> Healthwise, research has shown such gestures of gratitude to greatly boost well-being.";
-var mail3 = "</h3>3. Our goal is <b>1 million </b> compliments by <b>December 31st, 2015</b>. So far we're at <b>";
+var mail3 = "</h3>3. Our goal is <b>1 million </b> compliments by <b>December 31st, 2016</b>. So far we're at <b>";
 var mail35 = "/1000000</b>. If you'd like to take the gratitude pledge and be reminded to send compliments daily click ";
 var mail4 = "<br> 4. If this message is hurtful in any way, please forward the email to smangat@stanford.edu. There is 0 tolerance for cyber bullying.";
 var mail5 = "<br> 5. Cheers to a happier world. :) Have an amazing rest of your day!";
@@ -24,7 +24,7 @@ exports.sendCompliment = function(message,recipient,compliments,secretKey,kudo){
 		to: recipient,
 		subject: 'Someone Wrote You A Compliment! :)',
 		body: '',
-		html: mailintro + message + mail1 + mail2 +  secretKey + mail3 + compliments + mail35 + "kudositforward.com/gratitudepledge?key=" + secretKey +  mail4 + mail5,
+		html: mailintro + message + mail1 + mail2 +  secretKey + mail3 + compliments + "/1000000</b>." + mail4 + mail5,
 		attachments: [{path: '/home/deploy/warmhugs/public/images/baby-hug.gif'}]
 	 });
 	mail.build(function(mailBuildError, message) {
@@ -51,7 +51,7 @@ exports.sendConfirmation = function(email,recipient,compliments,secretKey,messag
 		to: email,
 		subject: 'Thank You for Sending a Compliment! :) ',
 		body: '',
-		html: "Your compliment to <b>" + recipient + "</b> has been sent! That's compliment #" + compliments + "/1000000." + confirmation + message + inspiration + "<3 Your reach is <b>" + usercompliments + "</b> compliments so far!!! Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + secretKey + "</b>" + pledgemessage + "kudositforward.com/?key=" + secretKey +  gifmessage ,
+		html: "Your compliment to <b>" + recipient + "</b> has been sent! That's compliment #" + compliments + "/1000000." + confirmation + message + inspiration + "<3 Your reach is <b>" + usercompliments + "</b> compliments so far!!! Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + secretKey + "</b>" + gifmessage ,
 		//specify the absolute directory to properly send a gif!
 		attachments: [{path: '/home/deploy/warmhugs/public/images/minion-hug.gif'}]
 		//attachments: [{path: '../public/images/tigger-hug.gif'}]
