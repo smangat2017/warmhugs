@@ -20,7 +20,7 @@ exports.sendCompliment = function(message,recipient,compliments,secretKey,kudo){
 		subject: 'Someone Wrote You A Compliment! :)',
 		body: '',
 		html: mailintro + message + mail1 + mail2 + secretKey + "<br></b></h3>." + mail4 + mail5,
-		attachments: [{path: '/home/deploy/warmhugs/public/images/baby-hug.gif'}]
+		attachments: [{path: '/home/bitnami/apps/warmhugs/public/images/baby-hug.gif'}]
 	 });
 	mail.build(function(mailBuildError, message) {
 		var dataToSend = {
@@ -48,7 +48,7 @@ exports.sendConfirmation = function(email,recipient,compliments,secretKey,messag
 		body: '',
 		html: "Your compliment to <b>" + recipient + "</b> has been sent! That's compliment #" + compliments + "/1000000." + confirmation + message + inspiration + "<3 Your reach is <b>" + usercompliments + "</b> compliments so far!!! Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + secretKey + "</b>" ,
 		//specify the absolute directory to properly send a gif!
-		attachments: [{path: '/home/deploy/warmhugs/public/images/minion-hug.gif'}]
+		attachments: [{path: '/home/bitnami/apps/warmhugs/public/images/minion-hug.gif'}]
 		//attachments: [{path: '../public/images/tigger-hug.gif'}]
 
 	});
