@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var uriUtil = require('mongodb-uri');
-var mongodbUri = 'mongodb://localhost:27017/warmhugs'
+var mongodbUri = 'mongodb://smangattwo:sm122194@ec2-52-8-254-86.us-west-1.compute.amazonaws.com:27017/dummyDB'
 var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 mongoose.connect(mongooseUri);
 var db = mongoose.connection;
