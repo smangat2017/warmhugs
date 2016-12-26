@@ -46,7 +46,7 @@ exports.sendConfirmation = function(email,recipient,compliments,secretKey,messag
 		to: email,
 		subject: 'Thank You for Sending a Compliment! :) ',
 		body: '',
-		html: "Your compliment to <b>" + recipient + "</b> has been sent! That's compliment #" + compliments + "/1000000." + confirmation + message + inspiration + "<3 Your reach is <b>" + usercompliments + "</b> compliments so far!!! Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + secretKey + "</b>" + gifmessage ,
+		html: "Your compliment to <b>" + recipient + "</b> has been sent! That's compliment #" + compliments + "/1000000." + confirmation + message + inspiration + "<3 Your reach is <b>" + usercompliments + "</b> compliments so far!!! Feel free to send another at www.kudositforward.com! Your secret key for reference is <b>" + secretKey + "</b>" ,
 		//specify the absolute directory to properly send a gif!
 		attachments: [{path: '/home/deploy/warmhugs/public/images/minion-hug.gif'}]
 		//attachments: [{path: '../public/images/tigger-hug.gif'}]
