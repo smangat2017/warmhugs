@@ -19,7 +19,7 @@ exports.sendCompliment = function(message,recipient,compliments,secretKey,kudo){
 		to: recipient,
 		subject: 'Someone Wrote You A Compliment! :)',
 		body: '',
-		html: mailintro + message + mail1 + mail2 + secretKey + compliments + "/1000000</b>." + mail4 + mail5,
+		html: mailintro + message + mail1 + mail2 + secretKey + compliments + "<br>/1000000</b></h3>." + mail4 + mail5,
 		attachments: [{path: '/home/deploy/warmhugs/public/images/baby-hug.gif'}]
 	 });
 	mail.build(function(mailBuildError, message) {
