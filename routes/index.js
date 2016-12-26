@@ -75,7 +75,6 @@ router.get('/user',function(req,res){
 });
 
 router.post('/reply',function(req,res){
-  console.log("Handling reply!!")
   var messageID = req.body['In-Reply-To'];
   var message = req.body['stripped-text'];
   var replier = req.body['from'];
