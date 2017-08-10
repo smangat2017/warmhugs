@@ -17,16 +17,16 @@ router.get('/', function(req, res) {
   var message = "Send an anonymous compliment and track your impact <3";
   var status = "";
 
-  if(req.param("success")==1){
+  if(req.params.success == 1){
     message = "Compliment Sent Succesfully! Feel free to send another :)";
     status = "text-success";
-  } else if(req.param("success")==0){
+  } else if(req.params.success == 0){
     message = "Please make sure you fill all fields!";
     status = "text-danger";
-  } else if(req.param("success")==2){
+  } else if(req.params.success == 2){
     message = "You've been succesfully added to the Gratitude Pledge! You'll now receive a daily reminder to send compliments! :)";
     status = "text-success";
-  } else if(req.param("success")==3){
+  } else if(req.params.success == 3){
     message = "You've already taken the gratitude pledge! :) Thank You! ";
     status = "text-success";
   }
@@ -79,6 +79,7 @@ router.post('/reply',function(req,res){
   var message = req.body['stripped-text'];
   var replier = req.body['from'];
   mixpanel.track('Reply');
+  console.log("GOT A REPLY");
   var kudo = Kudo.findOne({'messageid': messageID},function(err,kudo){
     if(err) throw err;
     if(kudo.replied!=true){
